@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 
-<xacro  :include filename="$(find my_robot)/urfd/my_robot.gazebo"/>
+<xacro:include filename="$(find my_robot)/urdf/my_robot.gazebo" ></xacro:include>
 
 <robot name="my_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 <gazebo reference = "left_wheel">
@@ -202,8 +202,4 @@
         />
     </inertial>
   </link>
-
-
-
-
 </robot>
