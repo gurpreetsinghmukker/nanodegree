@@ -14,7 +14,7 @@ void drive_robot(float lin_x, float ang_z)
     srv.request.angular_z = ang_z;
 
     if (!client.call(srv))
-        ROS_ERROR("Failed to call service DriveToTarget");
+       ROS_ERROR("Failed to call service DriveToTarget");
 
 }
 
@@ -23,7 +23,8 @@ void process_image_callback(const sensor_msgs::Image img)
 {
 
     int white_pixel = 255;
-    int pixel_position = 0;
+    int horiz_pixel_position_right_most = 0;
+    int horiz_pixel_position_left_most = img.width;
     int ball_position = 0;
     bool white_ball_found = false;
     int left_region_boundary = img.width/3;
@@ -40,26 +41,44 @@ void process_image_callback(const sensor_msgs::Image img)
     // Depending on the white ball position, call the drive_bot function and pass velocities to it
     // Request a stop when there's no white ball seen by the camera
 
-    for( int i = 0 ; i < img.height*img.width ; i++ )
+    for( int i = 0 ; i < img.height*img.width*3 ; i+=3 )
     {
-        if( img.data[i] == white_pixel )
+        if( img.data[i] == white_pixel && img.data[i+1] == white_pixel && img.data[i+2] == white_pixel )
         {
-            ROS_INFO("White pixel found at position %d\n", i);
+            //ROS_INFO("White pixel found at position %d\n", i);
+            if((i/3)%(img.width)<horiz_pixel_position_left_most)
+            {
+                horiz_pixel_position_left_most = (i/3)%img.width;
+            }
+            if((i/3)%img.width*3>horiz_pixel_position_right_most)
+            {
+                horiz_pixel_position_right_most = (i/3)%img.width;
+            }
             white_ball_found = true;
-            pixel_position = i;
-            break;
         }
     }
     
+    
 
-    ball_position = pixel_position % img.width; 
-    ROS_INFO("Ball Position %d \n", ball_position);
+    ball_position = (horiz_pixel_position_left_most + horiz_pixel_position_right_most)/2;
+   // ROS_INFO("horiz_pixel_position_left_most %d\n", horiz_pixel_position_left_most);
+   // ROS_INFO("horiz_pixel_position_right_most %d\n", horiz_pixel_position_right_most);
+   // ROS_INFO("Ball Position %d \n", ball_position);
 
-// find which regions the ball is in
+// find the width of the ball
+    
+
 if (white_ball_found == true)
 {
+    // to stop the robot from getting too close to the ball and pushing it
+    int ball_width = horiz_pixel_position_right_most - horiz_pixel_position_left_most;
+    if(ball_width > 400)
+    {
+        ROS_INFO("Ball width is greater than 600");
+        drive_robot(0,0);
+    }
 
-    if( 0 <= ball_position && ball_position< left_region_boundary ) // left region
+    else if( 0 <= ball_position && ball_position< left_region_boundary ) // left region
     {
         // turn to the left
         ROS_INFO("turning left");
