@@ -30,10 +30,10 @@ void process_image_callback(const sensor_msgs::Image img)
     int left_region_boundary = img.width/3;
     int mid_region_boundary = left_region_boundary*2;
     int right_region_boundary = img.width;
-    ROS_INFO("IMAGE WIDTH %d", img.width);
-    ROS_INFO("IMAGE HEIGHT %d", img.height);
-    ROS_INFO("left_region_boundary %d", left_region_boundary);
-    ROS_INFO("mid_region_boundary %d", mid_region_boundary);
+    //ROS_INFO("IMAGE WIDTH %d", img.width);
+    //ROS_INFO("IMAGE HEIGHT %d", img.height);
+   // ROS_INFO("left_region_boundary %d", left_region_boundary);
+   // ROS_INFO("mid_region_boundary %d", mid_region_boundary);
 
 
     // TODO: Loop through each pixel in the image and check if there's a bright white one
@@ -72,9 +72,9 @@ if (white_ball_found == true)
 {
     // to stop the robot from getting too close to the ball and pushing it
     int ball_width = horiz_pixel_position_right_most - horiz_pixel_position_left_most;
-    if(ball_width > 400)
+    if(ball_width > 300)
     {
-        ROS_INFO("Ball width is greater than 600");
+        ROS_INFO("Ball width is greater than 300");
         drive_robot(0,0);
     }
 
@@ -101,6 +101,7 @@ else if(white_ball_found == false)
     ROS_INFO("no ball found");
     drive_robot(0,0);
 }
+
 
 }
 

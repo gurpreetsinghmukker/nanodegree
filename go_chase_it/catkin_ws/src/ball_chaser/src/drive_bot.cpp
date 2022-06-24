@@ -19,6 +19,7 @@ bool handle_drive_request(ball_chaser::DriveToTarget::Request &req, ball_chaser:
         motor_command.angular.z = req.angular_z;
         // Publish angles to drive the robot
         motor_command_publisher.publish(motor_command);
+	return true;
 
 }
 
