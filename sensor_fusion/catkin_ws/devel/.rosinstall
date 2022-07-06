@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/workspace/nanodegree/sensor_fusion/catkin_ws/devel/setup.sh
