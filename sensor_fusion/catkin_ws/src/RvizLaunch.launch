@@ -1,0 +1,3 @@
+<launch>
+  <node type="rviz" name="rviz" pkg="rviz" args="-d /home/workspace/nanodegree/sensor_fusion/catkin_ws/src/EKFlab.rviz" />
+</launch>
